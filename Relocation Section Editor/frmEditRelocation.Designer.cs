@@ -43,9 +43,10 @@
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(127, 91);
+            this.btnCancel.Location = new System.Drawing.Point(254, 122);
+            this.btnCancel.Margin = new System.Windows.Forms.Padding(4);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(75, 23);
+            this.btnCancel.Size = new System.Drawing.Size(100, 28);
             this.btnCancel.TabIndex = 6;
             this.btnCancel.Text = "&Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
@@ -53,9 +54,10 @@
             // 
             // btnOK
             // 
-            this.btnOK.Location = new System.Drawing.Point(26, 91);
+            this.btnOK.Location = new System.Drawing.Point(124, 122);
+            this.btnOK.Margin = new System.Windows.Forms.Padding(4);
             this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(75, 23);
+            this.btnOK.Size = new System.Drawing.Size(100, 28);
             this.btnOK.TabIndex = 5;
             this.btnOK.Text = "&OK";
             this.btnOK.UseVisualStyleBackColor = true;
@@ -66,78 +68,89 @@
             this.cboType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboType.FormattingEnabled = true;
             this.cboType.Items.AddRange(new object[] {
-            "HIGH",
-            "LOW",
-            "HIGHLOW",
-            "HIGHADJ",
-            "JMPADDR",
-            "MIPS_JMPADDR16",
-            "DIR64"});
-            this.cboType.Location = new System.Drawing.Point(93, 64);
+            "IMAGE_REL_BASED_HIGH",
+            "IMAGE_REL_BASED_LOW",
+            "IMAGE_REL_BASED_HIGHLOW",
+            "IMAGE_REL_BASED_HIGHADJ",
+            "IMAGE_REL_BASED_MIPS_JMPADDR",
+            "IMAGE_REL_BASED_SECTION",
+            "IMAGE_REL_BASED_REL32",
+            "IMAGE_REL_BASED_RESERVED",
+            "IMAGE_REL_BASED_MIPS_JMPADDR16",
+            "IMAGE_REL_BASED_DIR64"});
+            this.cboType.Location = new System.Drawing.Point(124, 79);
+            this.cboType.Margin = new System.Windows.Forms.Padding(4);
             this.cboType.Name = "cboType";
-            this.cboType.Size = new System.Drawing.Size(122, 21);
+            this.cboType.Size = new System.Drawing.Size(230, 24);
             this.cboType.TabIndex = 4;
             // 
             // lblType
             // 
             this.lblType.AutoSize = true;
-            this.lblType.Location = new System.Drawing.Point(39, 67);
+            this.lblType.Location = new System.Drawing.Point(52, 82);
+            this.lblType.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblType.Name = "lblType";
-            this.lblType.Size = new System.Drawing.Size(34, 13);
+            this.lblType.Size = new System.Drawing.Size(44, 17);
             this.lblType.TabIndex = 3;
             this.lblType.Text = "Type:";
             // 
             // txtAddress
             // 
-            this.txtAddress.Location = new System.Drawing.Point(93, 12);
+            this.txtAddress.Location = new System.Drawing.Point(124, 15);
+            this.txtAddress.Margin = new System.Windows.Forms.Padding(4);
             this.txtAddress.MaxLength = 8;
             this.txtAddress.Name = "txtAddress";
             this.txtAddress.ReadOnly = true;
-            this.txtAddress.Size = new System.Drawing.Size(68, 20);
+            this.txtAddress.Size = new System.Drawing.Size(230, 22);
             this.txtAddress.TabIndex = 9;
             // 
             // lblAddress
             // 
             this.lblAddress.AutoSize = true;
-            this.lblAddress.Location = new System.Drawing.Point(25, 15);
+            this.lblAddress.Location = new System.Drawing.Point(33, 18);
+            this.lblAddress.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblAddress.Name = "lblAddress";
-            this.lblAddress.Size = new System.Drawing.Size(48, 13);
+            this.lblAddress.Size = new System.Drawing.Size(64, 17);
             this.lblAddress.TabIndex = 7;
             this.lblAddress.Text = "Address:";
             // 
             // lblHexa
             // 
             this.lblHexa.AutoSize = true;
-            this.lblHexa.Location = new System.Drawing.Point(77, 15);
+            this.lblHexa.Location = new System.Drawing.Point(103, 18);
+            this.lblHexa.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblHexa.Name = "lblHexa";
-            this.lblHexa.Size = new System.Drawing.Size(18, 13);
+            this.lblHexa.Size = new System.Drawing.Size(22, 17);
             this.lblHexa.TabIndex = 8;
             this.lblHexa.Text = "0x";
             // 
             // lblNewAddress
             // 
             this.lblNewAddress.AutoSize = true;
-            this.lblNewAddress.Location = new System.Drawing.Point(0, 38);
+            this.lblNewAddress.Location = new System.Drawing.Point(0, 50);
+            this.lblNewAddress.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblNewAddress.Name = "lblNewAddress";
-            this.lblNewAddress.Size = new System.Drawing.Size(73, 13);
+            this.lblNewAddress.Size = new System.Drawing.Size(95, 17);
             this.lblNewAddress.TabIndex = 0;
             this.lblNewAddress.Text = "New Address:";
             // 
             // lblHexa2
             // 
             this.lblHexa2.AutoSize = true;
-            this.lblHexa2.Location = new System.Drawing.Point(77, 40);
+            this.lblHexa2.Location = new System.Drawing.Point(103, 50);
+            this.lblHexa2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblHexa2.Name = "lblHexa2";
-            this.lblHexa2.Size = new System.Drawing.Size(18, 13);
+            this.lblHexa2.Size = new System.Drawing.Size(22, 17);
             this.lblHexa2.TabIndex = 1;
             this.lblHexa2.Text = "0x";
             // 
             // txtNewAddress
             // 
-            this.txtNewAddress.Location = new System.Drawing.Point(93, 38);
-            this.txtNewAddress.MaxLength = 8;
+            this.txtNewAddress.Location = new System.Drawing.Point(124, 47);
+            this.txtNewAddress.Margin = new System.Windows.Forms.Padding(4);
+            this.txtNewAddress.MaxLength = 16;
             this.txtNewAddress.Name = "txtNewAddress";
-            this.txtNewAddress.Size = new System.Drawing.Size(68, 20);
+            this.txtNewAddress.Size = new System.Drawing.Size(230, 22);
             this.txtNewAddress.TabIndex = 2;
             this.txtNewAddress.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtNewAddress_KeyPress);
             this.txtNewAddress.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtNewAddress_KeyUp);
@@ -145,10 +158,10 @@
             // frmEditRelocation
             // 
             this.AcceptButton = this.btnOK;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(229, 121);
+            this.ClientSize = new System.Drawing.Size(372, 163);
             this.Controls.Add(this.txtNewAddress);
             this.Controls.Add(this.lblHexa2);
             this.Controls.Add(this.lblNewAddress);
@@ -160,6 +173,7 @@
             this.Controls.Add(this.lblAddress);
             this.Controls.Add(this.lblHexa);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "frmEditRelocation";

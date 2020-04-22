@@ -6,6 +6,8 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
+using System.Runtime.InteropServices;
+using System.Diagnostics;
 
 namespace Relocation_Section_Editor
 {
@@ -13,7 +15,7 @@ namespace Relocation_Section_Editor
     {
         private Relocations rel = null;
         private int pageIndex = 0;
-        private uint baseAddress = 0;
+        private UInt64 baseAddress = 0;
         private string argPath = "";
 
         public frmMain(string[] args)
@@ -31,7 +33,7 @@ namespace Relocation_Section_Editor
 
         private void mnuMainHelpAbout_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("This program has been coded by gta126");
+            MessageBox.Show("This program has been coded by gta126", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void mnuMainFileOpen_Click(object sender, EventArgs e)
@@ -81,28 +83,11 @@ namespace Relocation_Section_Editor
             }
             catch (FileNotFoundException)
             {
-                MessageBox.Show("File not found");
+                MessageBox.Show("File not found", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (InvalidOperationException ex)
             {
-                switch (ex.Message)
-                {
-                    case "MZ":
-                        MessageBox.Show("MZ Header not found");
-                        break;
-                    case "PE":
-                        MessageBox.Show("PE Header not found");
-                        break;
-                    case "X86":
-                        MessageBox.Show("Is not a 32bits executable");
-                        break;
-                    case "RAW":
-                        MessageBox.Show("No relocation table in this file");
-                        break;
-                    default:
-                        MessageBox.Show("Unknown error");
-                        break;
-                }
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -113,7 +98,7 @@ namespace Relocation_Section_Editor
 
             lvRelocation.Items.Clear();
 
-            uint address = (uint)lvPage.SelectedItems[0].Tag;
+            UInt64 address = (UInt64)lvPage.SelectedItems[0].Tag;
             baseAddress = address;
             pageIndex = lvPage.SelectedItems[0].Index;
 
@@ -121,14 +106,19 @@ namespace Relocation_Section_Editor
             if (!rel.TryGetRelocs(address, out relocs))
                 return;
 
+            UInt64 itemBase = baseAddress - rel.GetImageBase();
+
             foreach (Relocations.Reloc reloc in relocs)
             {
                 ListViewItem item;
 
-                if (reloc.type == Relocations.BASE_RELOCATION_TYPE.ABSOLUTE)
+                if (reloc.type == PeHeader.BASE_RELOCATION_TYPE.IMAGE_REL_BASED_ABSOLUTE)
                     item = new ListViewItem("0x" + reloc.offset.ToString("X8"));
                 else
                     item = new ListViewItem("0x" + (address + reloc.offset).ToString("X8"));
+                item.SubItems.Add((rel.GetRawAddress() + reloc.offset).ToString("X8"));
+                item.SubItems.Add(reloc.offset.ToString("X8"));
+                item.SubItems.Add((itemBase + reloc.offset).ToString("X4"));
                 item.SubItems.Add(reloc.type.ToString());
                 item.Tag = reloc;
 
@@ -159,6 +149,7 @@ namespace Relocation_Section_Editor
             foreach (Relocations.Page page in rel.GetPages())
             {
                 ListViewItem item = new ListViewItem("0x" + page.address.ToString("X8"));
+                item.SubItems.Add("0x" + (page.address - rel.GetImageBase()).ToString("X8"));
                 item.SubItems.Add("0x" + page.size.ToString("X8"));
                 item.SubItems.Add(page.count.ToString());
                 item.Tag = page.address;
@@ -176,12 +167,14 @@ namespace Relocation_Section_Editor
 
         private void RefreshSize()
         {
-            staLblCurrentSize.Text = "Current size: 0x" + rel.GetVirtuallSize().ToString("X8");
+            staLblCurrentSize.Text = "Current size: 0x" + rel.GetVirtualSize().ToString("X8");
             staLblMaxSize.Text = "Max size: 0x" + rel.GetRawSize().ToString("X8");
+            staLblImageBase.Text = "Image base: 0x" + rel.GetImageBase().ToString("X8");
+            staLblVirtualAddress.Text = "Virtual address: 0x" + rel.GetVirtualAddress().ToString("X8");
 
             staPbSize.Minimum = 0;
             staPbSize.Maximum = (int)rel.GetRawSize();
-            staPbSize.Value = (int)rel.GetVirtuallSize();
+            staPbSize.Value = (int)rel.GetVirtualSize();
         }
 
         private void frmMain_Load(object sender, EventArgs e)
@@ -227,17 +220,17 @@ namespace Relocation_Section_Editor
             switch (code)
             {
                 case -1:
-                    MessageBox.Show("This address is already in the relocation table");
+                    MessageBox.Show("This address is already in the relocation table", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     break;
                 case 0:
-                    MessageBox.Show("Cannot add this address (0x" + frm.GetAddress().ToString("X8") + ")");
+                    MessageBox.Show("Cannot add this address (0x" + frm.GetAddress().ToString("X8") + ")", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     break;
                 case 1:
                 case 2:
                     RefreshData();
                     break;
                 default:
-                    MessageBox.Show("Unknown error");
+                    MessageBox.Show("Unknown error", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     break;
             }
             
@@ -256,7 +249,7 @@ namespace Relocation_Section_Editor
 
             if (!rel.EditRelocation(frm.GetOldAddress(), frm.GetNewAddress(), frm.GetRelocType()))
             {
-                MessageBox.Show("Cannot edit this address");
+                MessageBox.Show("Cannot edit this address", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -266,7 +259,7 @@ namespace Relocation_Section_Editor
         private void mnuMainFileSave_Click(object sender, EventArgs e)
         {
             if (!rel.WriteRelocations())
-                MessageBox.Show("File not saved");
+                MessageBox.Show("File not saved", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
@@ -338,7 +331,7 @@ namespace Relocation_Section_Editor
                 return;
 
             if (!rel.WriteRelocations(dlgSave.FileName))
-                MessageBox.Show("File not saved");
+                MessageBox.Show("File not saved", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             else
                 this.Text = "Relocation Section Editor - " + rel.GetPath();
         }
